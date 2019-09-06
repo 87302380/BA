@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.DEBUG)
 def get_parameters(train_data, kFold, iterations):
     parser = argparse.ArgumentParser(description='Example 1 - sequential and local execution.')
     parser.add_argument('--min_budget', type=float, help='Minimum budget used during the optimization.', default=1)
-    parser.add_argument('--max_budget', type=float, help='Maximum budget used during the optimization.', default=20)
+    parser.add_argument('--max_budget', type=float, help='Maximum budget used during the optimization.', default=1)
     parser.add_argument('--n_iterations', type=int, help='Number of iterations performed by the optimizer', default=iterations) # max value = 4
     # parser.add_argument('--worker', help='Flag to turn this into a worker process', action='store_true')
     parser.add_argument('--shared_directory', type=str,help='A directory that is accessible for all processes, e.g. a NFS share.', default='./result')
