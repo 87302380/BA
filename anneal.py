@@ -8,8 +8,6 @@ import save_to_csv
 
 def get_parameters(train_data, kFold, iterations, save = False, filepath = './result/loss_time_anneal.csv'):
 
-    time_dic = []
-    loss_dic = []
 
     def objective(parameters):
         if save:
@@ -38,6 +36,8 @@ def get_parameters(train_data, kFold, iterations, save = False, filepath = './re
     if save:
         trials = Trials()
         start = time.time()
+        time_dic = []
+        loss_dic = []
         best = fmin(objective, configspace, algo=anneal.suggest, max_evals=iterations, trials=trials)
 
         best_parameters = space_eval(configspace, best)

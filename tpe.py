@@ -8,13 +8,12 @@ import save_to_csv
 
 def get_parameters(train_data, kFold, iterations, save = False, filepath = './result/loss_time_tpe.csv'):
 
-    time_dic = []
-    loss_dic = []
+
 
     def objective(parameters):
         if save:
             loss, timepoint = object_function.cv_method(parameters, train_data, kFold, start)
-            time_dic.append(timepoint)
+            timepoint_dic.append(timepoint)
             loss_dic.append(loss)
 
         else:
@@ -40,13 +39,15 @@ def get_parameters(train_data, kFold, iterations, save = False, filepath = './re
     if save:
         trials = Trials()
         start = time.time()
+        timepoint_dic = []
+        loss_dic = []
         best = fmin(objective, configspace, algo=tpe.suggest, max_evals=iterations, trials=trials)
 
         best_parameters = space_eval(configspace, best)
         best_loss = trials.best_trial['result']['loss']
 
 
-        save_to_csv.save(filepath, time_dic, loss_dic)
+        save_to_csv.save(filepath, timepoint_dic, loss_dic)
 
     else:
         trials = Trials()

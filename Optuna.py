@@ -1,8 +1,12 @@
 import optuna
 import object_function
+import time
+import save_to_csv
 
-def get_parameters(train_data, kFold, iterations):
+def get_parameters(train_data, kFold, iterations, save=False, filepath = './result/loss_time_optuna.csv'):
+
     def objective(trial):
+
 
         num_leaves = trial.suggest_int('num_leaves', 10, 35)
         min_data_in_leaf = trial.suggest_int('min_data_in_leaf', 1, 12)
@@ -29,11 +33,27 @@ def get_parameters(train_data, kFold, iterations):
             'lambda_l2': lambda_l2,
             'min_gain_to_split': min_gain_to_split
         }
-        loss = object_function.cv_method(parameters, train_data, kFold)
+        if save:
+            loss, timepoint = object_function.cv_method(parameters, train_data, kFold, start)
+            timepoint_dic.append(timepoint)
+            loss_dic.append(loss)
+        else:
+            loss = object_function.cv_method(parameters, train_data, kFold)
+
         return loss
 
-    study = optuna.create_study()
-    study.optimize(objective, n_trials=iterations)
+    if save:
+        start = time.time()
+        timepoint_dic = []
+        loss_dic = []
+        study = optuna.create_study()
+        study.optimize(objective, n_trials=iterations)
+        save_to_csv.save(filepath, timepoint_dic, loss_dic)
+    else:
+        study = optuna.create_study()
+        study.optimize(objective, n_trials=iterations)
+
+
 
 
     return study.best_params, study.best_value

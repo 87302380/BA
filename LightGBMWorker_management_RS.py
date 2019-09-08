@@ -4,11 +4,12 @@ import hpbandster.core.nameserver as hpns
 import hpbandster.core.result as hpres
 from hpbandster.optimizers import RandomSearch as RandomSearch
 from LightGBMWorker import LightGBMWorker as worker
+import save_to_csv
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-def get_parameters(train_data, kFold, iterations):
+def get_parameters(train_data, kFold, iterations, save=False, filepath = './result/loss_time_rs.csv'):
     parser = argparse.ArgumentParser(description='Example 1 - sequential and local execution.')
     parser.add_argument('--min_budget', type=float, help='Minimum budget used during the optimization.', default=1)
     parser.add_argument('--max_budget', type=float, help='Maximum budget used during the optimization.', default=1)
@@ -44,5 +45,16 @@ def get_parameters(train_data, kFold, iterations):
 
     parameter = id2config[incumbent]['config']
     min_error = info[0]['loss']
+
+    if save:
+        all_info = res.get_all_runs()
+        timepoint_dic = []
+        loss_dic = []
+
+        for i in all_info:
+            timepoint_dic.append(i['time_stamps']['finished'])
+            loss_dic.append(i['loss'])
+
+        save_to_csv.save(filepath, timepoint_dic, loss_dic)
 
     return parameter, min_error

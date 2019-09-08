@@ -22,8 +22,8 @@ class hyperparameter_optimization:
             params, loss = gridsearch.run_grid_search(train_data, kfold)
         return params, loss
 
-    def search_parameter_randomsearch(self, train_data, kfold, iterations):
-        params, loss = rs.get_parameters(train_data, kfold, iterations)
+    def search_parameter_randomsearch(self, train_data, kfold, iterations, save=False, filepath = './result/loss_time_rs.csv'):
+        params, loss = rs.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
         parameter = self.format_parameter(params)
 
         return parameter, loss
@@ -38,14 +38,14 @@ class hyperparameter_optimization:
 
         return parameter, loss
 
-    def search_parameter_bohb(self, train_data, kfold, iterations):
-        params, loss = bohb.get_parameters(train_data, kfold, iterations)
+    def search_parameter_bohb(self, train_data, kfold, iterations, save=False, filepath = './result/loss_time_bohb.csv'):
+        params, loss = bohb.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
         parameter = self.format_parameter(params)
 
         return parameter, loss
 
-    def search_parameter_optuna(self, train_data, kfold, iterations):
-        params, loss = Optuna.get_parameters(train_data, kfold, iterations)
+    def search_parameter_optuna(self, train_data, kfold, iterations, save=False, filepath = './result/loss_time_optuna.csv'):
+        params, loss = Optuna.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
         parameter = self.format_parameter(params)
 
         return parameter, loss
