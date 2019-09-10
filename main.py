@@ -1,28 +1,36 @@
 from data import data
 from parameters_optimization import hyperparameter_optimization
+from sklearn.model_selection import LeaveOneOut
+import lightgbm as lgb
 
-import format_time
 import time
 
 start = time.time()
 path = "colon_label_in_first_row.csv"
 data = data(path)
 
-train_data = data.get_lgbDataset(377)
+input_data, test_data = data.spilt_data()
+
 
 hpo = hyperparameter_optimization()
-# default_loss = hpo.default_parameter(train_data, 62)
+feature_loo = LeaveOneOut()
+for excluded_feature_index, target_feature_index in feature_loo.split(range(input_data.shape[1])):
 
-# bohb_para, bohb_loss = hpo.search_parameter_bohb(train_data, 62, 3, save=True)
-# print(bohb_para)
-# print(bohb_loss)
+    selected_x = input_data[:, excluded_feature_index]
+    selected_y = input_data[:, target_feature_index][:, 0]
+    train_data = lgb.Dataset(selected_x, label= selected_y)
 
-# rs_para, rs_loss = hpo.search_parameter_randomsearch(train_data, kfold=62,iterations= 3, save=True)
+    # param, loss = hpo.default_parameter(target_feature_index, train_data, 46)
+    param, loss = hpo.search_parameter_optuna(target_feature_index, train_data, 46, 10)
+
+
 #
-# print(rs_para)
-# print(rs_loss)
-
-
+# y_predicted = booster.predict(x_test)
+#
+# print(np.round(y_predicted))
+# print(y_test)
+# squared_error = (y_predicted - y_test) * (y_predicted - y_test)
+# print(squared_error)
 # pg = {
 #     'boosting_type': ['gbdt'],
 #     'objective': ['regression_l2'],
@@ -37,9 +45,12 @@ hpo = hyperparameter_optimization()
 #
 # print(tpe)
 # print(tpe_loss)
-for i in range(0,30):
-    filepath = './result/bohb/loss_time_bohb' + str(i) + '.csv'
-    bohb_para, bohb_loss = hpo.search_parameter_bohb(train_data, 62, 100, save=True, filepath=filepath)
-
-
-print(time.time()-start)
+# loss = hpo.default_parameter(train_data, 62)
+# print(loss)
+#
+# for i in range(0,1):
+#     filepath = './result/anneal/loss_time_anneal_test' + str(i) + '.csv'
+#     hpo.search_parameter_anneal(train_data, 62, 40, save=True, filepath=filepath)
+#
+#
+# print(time.time()-start)
