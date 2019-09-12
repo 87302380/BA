@@ -46,7 +46,7 @@ hpo = hyperparameter_optimization()
 #
 # print(tpe)
 # print(tpe_loss)
-loss = hpo.search_parameter_tpe(377, train_data, 62, 100)
+loss = hpo.search_parameter_gs(377, train_data, 62, 100)
 print(loss)
 #
 # for i in range(0,1):

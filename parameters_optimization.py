@@ -5,6 +5,7 @@ import tpe
 import anneal
 import Optuna
 import gridsearch
+import bayesianOptimization
 import object_function
 import pandas as pd
 
@@ -64,6 +65,13 @@ class hyperparameter_optimization:
 
     def search_parameter_optuna(self, target_feature_index, train_data, kfold, iterations, save=False, filepath = './result/loss_time_optuna.csv'):
         parameter, loss = Optuna.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
+        parameter = self.format_parameter(parameter)
+        self.update_dict(target_feature_index, parameter, loss)
+
+        return parameter, loss
+
+    def search_parameter_gs(self, target_feature_index, train_data, kfold, iterations, save=False, filepath = './result/loss_time_gs.csv'):
+        parameter, loss = bayesianOptimization.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
         parameter = self.format_parameter(parameter)
         self.update_dict(target_feature_index, parameter, loss)
 
