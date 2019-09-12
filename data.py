@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+import lightgbm as lgb
 
 class data:
     def __init__(self, file_path):
@@ -41,18 +41,18 @@ class data:
         return train_data, test_data
 
 
-    # def get_lgbDataset(self, target_feature_index, data=None):
-    #     if data is not None:
-    #         x_train = np.delete(data, target_feature_index, 1)
-    #         y_train = data[:, target_feature_index]
-    #
-    #         train_data = lgb.Dataset(x_train, label=y_train)
-    #     else:
-    #         x_train = np.delete(self.values, target_feature_index, 1)
-    #         y_train = self.values[:, target_feature_index]
-    #
-    #         train_data = lgb.Dataset(x_train, label=y_train)
-    #
-    #     return train_data
+    def get_lgbDataset(self, target_feature_index, data=None):
+        if data is not None:
+            x_train = np.delete(data, target_feature_index, 1)
+            y_train = data[:, target_feature_index]
+
+            train_data = lgb.Dataset(x_train, label=y_train)
+        else:
+            x_train = np.delete(self.values, target_feature_index, 1)
+            y_train = self.values[:, target_feature_index]
+
+            train_data = lgb.Dataset(x_train, label=y_train)
+
+        return train_data
 
 

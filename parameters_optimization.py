@@ -1,5 +1,6 @@
 import LightGBMWorker_management_BOHB as bohb
 import LightGBMWorker_management_RS as rs
+import LightGBMWorker_management_Hyperband as hpb
 import tpe
 import anneal
 import Optuna
@@ -43,6 +44,13 @@ class hyperparameter_optimization:
 
     def search_parameter_anneal(self, target_feature_index, train_data, kfold, iterations, save=False, filepath = './result/loss_time_anneal.csv'):
         parameter, loss = anneal.get_parameters(train_data, kfold, iterations, save=save, filepath=filepath)
+        self.update_dict(target_feature_index, parameter, loss)
+
+        return parameter, loss
+
+    def search_parameter_hyperband(self, target_feature_index, train_data, kfold, iterations, save=False, filepath = './result/loss_time_bohb.csv'):
+        parameter, loss = hpb.get_parameters(train_data, kfold, iterations, save=save, filepath = filepath)
+        parameter = self.format_parameter(parameter)
         self.update_dict(target_feature_index, parameter, loss)
 
         return parameter, loss

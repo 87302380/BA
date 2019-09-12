@@ -11,17 +11,18 @@ data = data(path)
 
 input_data, test_data = data.spilt_data()
 
+train_data = data.get_lgbDataset(377)
 
 hpo = hyperparameter_optimization()
-feature_loo = LeaveOneOut()
-for excluded_feature_index, target_feature_index in feature_loo.split(range(input_data.shape[1])):
-
-    selected_x = input_data[:, excluded_feature_index]
-    selected_y = input_data[:, target_feature_index][:, 0]
-    train_data = lgb.Dataset(selected_x, label= selected_y)
+# feature_loo = LeaveOneOut()
+# for excluded_feature_index, target_feature_index in feature_loo.split(range(input_data.shape[1])):
+#
+#     selected_x = input_data[:, excluded_feature_index]
+#     selected_y = input_data[:, target_feature_index][:, 0]
+#     train_data = lgb.Dataset(selected_x, label= selected_y)
 
     # param, loss = hpo.default_parameter(target_feature_index, train_data, 46)
-    param, loss = hpo.search_parameter_optuna(target_feature_index, train_data, 46, 10)
+    # param, loss = hpo.search_parameter_hyperband(target_feature_index, train_data, 46, 10)
 
 
 #
@@ -45,8 +46,8 @@ for excluded_feature_index, target_feature_index in feature_loo.split(range(inpu
 #
 # print(tpe)
 # print(tpe_loss)
-# loss = hpo.default_parameter(train_data, 62)
-# print(loss)
+loss = hpo.search_parameter_tpe(377, train_data, 62, 100)
+print(loss)
 #
 # for i in range(0,1):
 #     filepath = './result/anneal/loss_time_anneal_test' + str(i) + '.csv'
