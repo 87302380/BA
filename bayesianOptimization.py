@@ -1,6 +1,7 @@
 from bayes_opt import BayesianOptimization
 import time
 import object_function
+import save_to_csv
 
 def get_parameters(train_data, kFold, iterations, save=False, filepath = './result/loss_time_gs.csv'):
     def func(parameters):
@@ -56,6 +57,13 @@ def get_parameters(train_data, kFold, iterations, save=False, filepath = './resu
         start = time.time()
         timepoint_dic = []
         loss_dic = []
+
+        optimizer.maximize(init_points=5, n_iter=iterations - 5)
+
+        loss = -optimizer.max['target']
+        params = optimizer.max['params']
+
+        save_to_csv.save(filepath, timepoint_dic, loss_dic)
     else:
         optimizer.maximize(init_points=5, n_iter=iterations - 5)
 
