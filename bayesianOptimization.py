@@ -49,7 +49,7 @@ def get_parameters(train_data, kFold, iterations, save=False, filepath = './resu
     optimizer = BayesianOptimization(
         f=black_box_function,
         pbounds=configspace,
-        verbose=2, # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
+        verbose=1, # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
         random_state=1,
     )
     if save:
