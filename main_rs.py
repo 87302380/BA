@@ -5,7 +5,7 @@ import format_time
 import time
 
 start = time.time()
-path = "/home/lchen/BA/colon_label_in_first_row.csv"
+path = "colon_label_in_first_row.csv"
 data = data(path)
 
 train_data = data.get_lgbDataset(377)
@@ -24,7 +24,7 @@ hpo = hyperparameter_optimization()
 #
 # print(tpe)
 # print(tpe_loss)
-for i in range(0,30):
-    filepath = '/vol/projects/lchen/result/rs/loss_time_rs' + str(i) + '.csv'
+for i in range(10,12):
+    filepath = './result/rs/loss_time_rs' + str(i) + '.csv'
     hpo.search_parameter_randomsearch(377, train_data, kfold=62, iterations=200, save=True, filepath=filepath)
 

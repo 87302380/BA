@@ -13,7 +13,7 @@ def cv_method(parameters, train_data, kfold, start_time = None):
 
     loss = min(eval_hist['l2-mean'])
 
-
+    print(loss)
     if start_time:
         return loss, time.time()-start_time
     else:
