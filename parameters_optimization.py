@@ -21,6 +21,8 @@ class hyperparameter_optimization:
         self.update_dict(target_feature_index, parameter, loss)
         return parameter, loss
 
+    # Grid search can manually set the search space, See the gridsearch.py for an example of the format.
+
     def search_parameter_gridsearch(self, target_feature_index, train_data, kfold, param_grid = None):
         if param_grid:
             parameter, loss = gridsearch.run_grid_search(train_data, kfold, param_grid)

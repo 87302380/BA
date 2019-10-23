@@ -2,7 +2,6 @@ from sklearn.model_selection import GridSearchCV
 import lightgbm as lgb
 from sklearn.model_selection import KFold
 import object_function
-from data import data
 
 pg = {
     'boosting_type': ['gbdt'],

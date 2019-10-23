@@ -23,7 +23,7 @@ for i in range(0, 30):
     filepath = './result/gs/loss_time_optuna' + str(i) + '.csv'
 
     # Choosing a method of hyperparameter optimization
-    loss = hpo.search_parameter_optuna(377, train_data, 10, 2, save=True, filepath=filepath)
+    loss = hpo.search_parameter_optuna(target_feature_index=377, train_data=train_data, kfold=10, iterations=2, save=True, filepath=filepath)
 
 
 
