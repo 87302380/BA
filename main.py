@@ -1,31 +1,29 @@
 from data import data
 from parameters_optimization import hyperparameter_optimization
-from sklearn.model_selection import LeaveOneOut
-import lightgbm as lgb
 
-import time
-
-start = time.time()
+# Set the path to the data file
 path = "colon_label_in_first_row.csv"
+
+# Load data using the data class
 data = data(path)
 
+# The data class provides the ability to split data, which can be easily divided into test sets and training sets.
 input_data, test_data = data.spilt_data()
 
+# can get the dataset that matches leaveoneout directly by using the get_lgbDataset() method.
 train_data = data.get_lgbDataset(377)
 
+# Create a hyperparameter optimized object, use this object to easily use different hyperparameter optimization methods.
 hpo = hyperparameter_optimization()
-feature_loo = LeaveOneOut()
-for excluded_feature_index, target_feature_index in feature_loo.split(range(input_data.shape[1])):
 
-    selected_x = input_data[:, excluded_feature_index]
-    selected_y = input_data[:, target_feature_index][:, 0]
-    train_data = lgb.Dataset(selected_x, label= selected_y)
+# Repeat the experiment. We repeated 30 times for all methods, and some methods were repeated 60 times.
+for i in range(0, 30):
 
-    param, loss = hpo.default_parameter(target_feature_index, train_data, 46)
-    param, loss = hpo.search_parameter_hyperband(target_feature_index, train_data, 46, 10)
+    # Set the output path of the result
+    filepath = './result/gs/loss_time_optuna' + str(i) + '.csv'
+
+    # Choosing a method of hyperparameter optimization
+    loss = hpo.search_parameter_optuna(377, train_data, 10, 2, save=True, filepath=filepath)
 
 
-# for i in range(0, 30):
-#     filepath = './result/gs/loss_time_gs' + str(i) + '.csv'
-#     loss = hpo.search_parameter_gs(377, train_data, 10, 2, save=True, filepath=filepath)
 
